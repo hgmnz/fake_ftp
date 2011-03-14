@@ -164,7 +164,7 @@ module FakeFtp
     end
 
     def _size(filename)
-      file(filename.to_s).bytes.to_f.to_s
+      "213 #{file(filename.to_s).bytes.to_s}"
     end
 
     def active?

@@ -321,7 +321,7 @@ describe FakeFtp::Server do
             @client.gets
 
             @client.puts("SIZE some_file")
-            @client.gets.should =~ /10\.0/
+            @client.gets.strip.should == "213 10"
           end
         end
 
