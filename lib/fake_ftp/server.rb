@@ -140,7 +140,7 @@ module FakeFtp
       data_client = active? ? @active_connection : @data_server.accept
 
       data = data_client.recv(1024)
-      file = FakeFtp::File.new(::File.basename(filename.to_s), data.length, @mode)
+      file = FakeFtp::File.new(::File.basename(filename.to_s), data.chomp.length, @mode)
       @files << file
 
       data_client.close
