@@ -311,6 +311,18 @@ describe FakeFtp::Server do
             @server.files.should include('some_file')
             @server.file('some_file').bytes.should == 10
           end
+
+          it 'provides file size on SIZE' do
+            @client.puts "STOR some_file"
+            @client.gets.should == "125 Do it!\r\n"
+            @data_client = TCPSocket.open('127.0.0.1', 21213)
+            @data_client.puts "1234567890"
+            @data_client.close
+            @client.gets
+
+            @client.puts("SIZE some_file")
+            @client.gets.should =~ /10\.0/
+          end
         end
 
         context 'active' do

@@ -7,7 +7,7 @@ module FakeFtp
     attr_accessor :port, :passive_port
     attr_reader :mode
 
-    CMDS = %w[acct cwd cdup pass pasv port pwd quit stor type user]
+    CMDS = %w[acct cwd cdup pass pasv port pwd quit stor type user size]
     LNBK = "\r\n"
 
     def initialize(control_port = 21, data_port = nil, options = {})
@@ -74,8 +74,8 @@ module FakeFtp
     end
 
     def parse(request)
-      return if request.nil?
       puts request if @options[:debug]
+      return if request.nil?
       command = request[0, 4].downcase.strip
       contents = request.split
       message = contents[1..contents.length]
@@ -161,6 +161,10 @@ module FakeFtp
 
     def _user(name = '')
       (name.to_s == 'anonymous') ? '230 logged in' : '331 send your password'
+    end
+
+    def _size(filename)
+      file(filename.to_s).bytes.to_f.to_s
     end
 
     def active?
